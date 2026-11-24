@@ -58,7 +58,7 @@ Inlay/
 │   ├── components/     # themed-text, themed-view, app-tabs, ui/collapsible, ...
 │   ├── hooks/          # use-theme, use-color-scheme
 │   └── constants/theme.ts
-├── assets/             # icons, splash, images
+├── assets/             # empty — add fonts/icons/images here
 ├── scripts/reset-project.js
 ├── app.json            # Expo config
 ├── AGENTS.md           # AI-agent guidance for Expo
@@ -71,7 +71,7 @@ Inlay/
 
 - `name` / `slug`: `Inlay`
 - `scheme`: `inlay` (deep links)
-- Plugins: `expo-router`, `expo-splash-screen`
+- Plugins: `expo-splash-screen` (`expo-router` removed; app uses React Navigation)
 - Experiments: `typedRoutes`, `reactCompiler`
 - Web output: `server`
 
