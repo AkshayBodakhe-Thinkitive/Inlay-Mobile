@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App Base Structure</title>
+<style>
+:root{
+  --bg:#f6f7fb;--card:#fff;--ink:#1c2230;--muted:#5d6678;--line:#e3e7ef;
+  --primary:#3b5bdb;--primary-soft:#e8edff;--ok:#1f9d63;--ok-soft:#e1f6ec;
+  --warn:#c77700;--warn-soft:#fff3dc;--bad:#c92a2a;--bad-soft:#ffe8e8;
+  --code:#f0f2f8;--shadow:0 1px 3px rgba(20,30,60,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10131b;--card:#181c27;--ink:#e8ebf3;--muted:#9aa3b6;--line:#2a3042;
+    --primary:#8fa5ff;--primary-soft:#232a4a;--ok:#4cd694;--ok-soft:#14302380;
+    --warn:#ffb54a;--warn-soft:#3a2b10;--bad:#ff8080;--bad-soft:#3a1717;
+    --code:#202637;--shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10131b;--card:#181c27;--ink:#e8ebf3;--muted:#9aa3b6;--line:#2a3042;
+  --primary:#8fa5ff;--primary-soft:#232a4a;--ok:#4cd694;--ok-soft:#14302380;
+  --warn:#ffb54a;--warn-soft:#3a2b10;--bad:#ff8080;--bad-soft:#3a1717;
+  --code:#202637;--shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em}
+code{background:var(--code);padding:1px 6px;border-radius:5px}
+a{color:var(--primary)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+header.hero{padding:36px 0 18px}
+header.hero h1{margin:0 0 6px;font-size:28px;letter-spacing:-.3px}
+header.hero p{margin:0;color:var(--muted);max-width:760px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{background:var(--primary-soft);color:var(--primary);padding:3px 11px;border-radius:99px;font-size:12.5px;font-weight:600}
+nav.toc{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;margin-bottom:18px;display:flex;gap:6px;overflow-x:auto;white-space:nowrap}
+nav.toc a{text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:8px;font-size:13px;font-weight:600}
+nav.toc a:hover{background:var(--primary-soft);color:var(--primary)}
+nav.toc button{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 18px;box-shadow:var(--shadow)}
+section h2{margin:0 0 4px;font-size:20px}
+section h2 .n{display:inline-block;background:var(--primary);color:#fff;border-radius:7px;font-size:13px;padding:1px 8px;margin-right:8px;vertical-align:2px}
+section>.sub{color:var(--muted);margin:0 0 16px}
+h3{margin:22px 0 8px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:var(--bg)}
+.card b{display:block;margin-bottom:2px}
+.card span{color:var(--muted);font-size:13.5px}
+.callout{border-radius:10px;padding:11px 14px;margin:12px 0;font-size:14px}
+.callout.warn{background:var(--warn-soft);border-left:4px solid var(--warn)}
+.callout.info{background:var(--primary-soft);border-left:4px solid var(--primary)}
+.callout.bad{background:var(--bad-soft);border-left:4px solid var(--bad)}
+.callout.ok{background:var(--ok-soft);border-left:4px solid var(--ok)}
+
+/* layer diagram */
+.layers{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.layer{border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.layer .t{font-weight:700}.layer .d{color:var(--muted);font-size:13px}
+.layer.l1{border-color:var(--primary)}.layer.l2{border-color:var(--ok)}.layer.l3{border-color:var(--warn)}
+.arrow{text-align:center;color:var(--muted);font-size:13px;line-height:1}
+
+/* flow */
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.flow .step{background:var(--primary-soft);color:var(--primary);border-radius:8px;padding:6px 11px;font-weight:600;font-size:13.5px}
+.flow .step.alt{background:var(--ok-soft);color:var(--ok)}
+.flow .sep{color:var(--muted)}
+.nest{border:1.5px dashed var(--line);border-radius:10px;padding:8px 10px;margin:6px 0}
+.nest>.nest{margin-left:14px}
+.nest .lab{font-weight:700;font-size:13.5px}
+.nest .lab small{font-weight:400;color:var(--muted)}
+
+/* tree */
+.tree-tools{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tree-tools button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:13px}
+.tree-tools button:hover{border-color:var(--primary);color:var(--primary)}
+.tree ul{list-style:none;margin:0;padding-left:20px;border-left:1px dashed var(--line)}
+.tree>ul{border-left:0;padding-left:0}
+.tree li{margin:2px 0}
+.row{display:flex;gap:8px;align-items:baseline;padding:3px 6px;border-radius:7px;flex-wrap:wrap}
+.row:hover{background:var(--primary-soft)}
+.row .name{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;font-weight:600}
+.row .desc{color:var(--muted);font-size:13px}
+.row .tag{font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px}
+.tag.copy{background:var(--ok-soft);color:var(--ok)}
+.tag.adapt{background:var(--warn-soft);color:var(--warn)}
+.tag.skip{background:var(--bad-soft);color:var(--bad)}
+.tag.opt{background:var(--primary-soft);color:var(--primary)}
+details>summary{cursor:pointer;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary .name::before{content:"▸ ";color:var(--muted)}
+details[open]>summary .name::before{content:"▾ "}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+
+/* checklist */
+.check{list-style:none;padding:0;margin:0;counter-reset:c}
+.check li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.check li:last-child{border-bottom:0}
+.check input{margin-top:5px;accent-color:var(--primary);width:16px;height:16px;flex:none}
+.check label{cursor:pointer}
+.check li.done label{text-decoration:line-through;color:var(--muted)}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 12px}
+.progress i{display:block;height:100%;width:0;background:var(--ok);transition:width .2s}
+
+pre{background:var(--code);padding:12px 14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:8px 0}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+@media (max-width:560px){section{padding:16px}header.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>App Base Structure</h1>
+  <p>What the Adaptivate patient app does underneath its patient-specific features — laid out so you can copy it to start a new Expo / React Native app. Taken from the code as of 2026-11-23.</p>
+  <div class="pills">
+    <span class="pill">Expo SDK 57</span><span class="pill">React Native 0.86</span><span class="pill">React 19</span>
+    <span class="pill">TypeScript strict</span><span class="pill">React Navigation 7</span><span class="pill">Redux Toolkit + TanStack Query</span>
+  </div>
+  <div class="callout warn" style="margin-top:14px">Note: <code>PROJECT_ARCHITECTURE.md</code> at the repo root is out of date — it says Expo Router; the app uses React Navigation.</div>
+</header>
+
+<nav class="toc">
+  <a href="#glance">At a glance</a><a href="#stack">Stack</a><a href="#tree">Folder tree</a><a href="#feature">Feature anatomy</a>
+  <a href="#shell">App shell</a><a href="#api">API layer</a><a href="#config">Config</a><a href="#auth">Auth</a>
+  <a href="#ui">UI</a><a href="#tests">Testing</a><a href="#gates">Quality gates</a><a href="#native">Native</a>
+  <a href="#boot">Bootstrap</a><a href="#pitfalls">Pitfalls</a>
+  <button id="theme" type="button">Theme</button>
+</nav>
+
+<!-- AT A GLANCE -->
+<section id="glance">
+  <h2>At a glance</h2>
+  <p class="sub">Three layers. Each one may use the one below it, never the one above.</p>
+  <div class="layers">
+    <div class="layer l1"><span><span class="t">src/navigation</span> — who goes where</span><span class="d">Root → Auth / App stacks, tab bar, typed route params</span></div>
+    <div class="arrow">↓ uses</div>
+    <div class="layer l2"><span><span class="t">src/features/&lt;name&gt;</span> — one folder per product area</span><span class="d">screens, components, hooks, services, types, mock, tests</span></div>
+    <div class="arrow">↓ uses</div>
+    <div class="layer l3"><span><span class="t">src/shared</span> — used by 2+ features</span><span class="d">api client, components, config, i18n, store, hooks, utils</span></div>
+  </div>
+  <h3>Inside one feature</h3>
+  <div class="flow">
+    <span class="step">Screen</span><span class="sep">→</span><span class="step">Hook (React Query)</span><span class="sep">→</span><span class="step">Service</span><span class="sep">→</span><span class="step alt">apiClient (axios)</span><span class="sep">→</span><span class="step alt">Backend</span>
+  </div>
+  <p class="sub" style="margin-top:8px">Screens never import axios. Services are the only place that call the API.</p>
+  <div class="callout info"><code>shared/</code> never imports from <code>features/</code> — two known exceptions exist (<code>shared/api/client.ts</code> and <code>shared/store/index.ts</code> import auth/notification slices); don't copy them.</div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <h2><span class="n">1</span>Stack</h2>
+  <p class="sub">What to install in the new project.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Concern</th><th>Choice</th></tr>
+    <tr><td>Runtime</td><td>Expo SDK 57 (dev client + prebuild, <b>not</b> Expo Go), React Native 0.86, React 19, TypeScript strict</td></tr>
+    <tr><td>Navigation</td><td>React Navigation 7: native stack + bottom tabs, typed param lists, deep links via <code>linking</code></td></tr>
+    <tr><td>App state</td><td>Redux Toolkit — auth session, toast, error popup, connectivity</td></tr>
+    <tr><td>Server state</td><td>TanStack Query v5 — lists, details, paging</td></tr>
+    <tr><td>HTTP</td><td>axios instance with interceptors (see API layer)</td></tr>
+    <tr><td>Forms / validation</td><td>react-hook-form + zod</td></tr>
+    <tr><td>Styling</td><td>Plain <code>StyleSheet</code> + shared <code>Colors</code> / <code>FontFamily</code>; NativeWind installed</td></tr>
+    <tr><td>Sizing</td><td><code>react-native-responsive-dimensions</code> + a font-scale context</td></tr>
+    <tr><td>i18n</td><td>i18next + react-i18next; <code>en.json</code> and <code>hi.json</code>, both maintained</td></tr>
+    <tr><td>Storage</td><td><code>expo-secure-store</code> for tokens, AsyncStorage for non-secret prefs</td></tr>
+    <tr><td>Push / crash</td><td><code>@react-native-firebase/{app,messaging,crashlytics}</code> + <code>expo-notifications</code></td></tr>
+    <tr><td>SVG</td><td><code>react-native-svg</code> + <code>react-native-svg-transformer</code> (import <code>.svg</code> as a component)</td></tr>
+    <tr><td>Tests</td><td>Jest (<code>jest-expo</code>) + <code>@testing-library/react-native</code></td></tr>
+    <tr><td>Builds</td><td>EAS profiles: development, preview, qa, uat, production</td></tr>
+  </table></div>
+</section>
+
+<!-- TREE -->
+<section id="tree">
+  <h2><span class="n">2</span>Folder tree (base only)</h2>
+  <p class="sub">Click a folder to open it. Tags tell you what to do with it in a new project.</p>
+  <div class="legend">
+    <span><span class="row"><span class="tag copy">copy</span></span> copy as-is</span>
+    <span><span class="row"><span class="tag adapt">adapt</span></span> copy, then edit</span>
+    <span><span class="row"><span class="tag opt">optional</span></span> only if you need it</span>
+    <span><span class="row"><span class="tag skip">skip</span></span> domain-specific</span>
+  </div>
+  <div class="tree-tools"><button type="button" id="expand">Expand all</button><button type="button" id="collapse">Collapse all</button></div>
+
+  <div class="tree" id="treeRoot">
+  <ul>
+    <li><div class="row"><span class="name">App.tsx</span><span class="tag adapt">adapt</span><span class="desc">providers, fonts, splash, deep-link config, auth rehydration. Change DOMAIN, scheme, screen paths.</span></div></li>
+    <li><div class="row"><span class="name">index.ts</span><span class="tag copy">copy</span><span class="desc">registerRootComponent</span></div></li>
+    <li><div class="row"><span class="name">app.json · eas.json</span><span class="tag adapt">adapt</span><span class="desc">Expo config + EAS profiles. New app name, bundle id, package name, Firebase files.</span></div></li>
+    <li><div class="row"><span class="name">babel · metro · tailwind · tsconfig · jest.config · jest.setup</span><span class="tag copy">copy</span><span class="desc">tooling config. Metro has the SVG transformer + NativeWind wrapper; jest.setup stubs native modules.</span></div></li>
+    <li><div class="row"><span class="name">.env.example</span><span class="tag adapt">adapt</span><span class="desc">every EXPO_PUBLIC_* variable, documented</span></div></li>
+    <li><div class="row"><span class="name">svg.d.ts · nativewind-env.d.ts</span><span class="tag copy">copy</span><span class="desc">ambient types</span></div></li>
+    <li><details><summary class="row"><span class="name">assets/</span><span class="tag adapt">adapt</span><span class="desc">fonts (Inter), icons, logos, svg</span></summary></details></li>
+    <li><details><summary class="row"><span class="name">plugins/</span><span class="tag opt">optional</span><span class="desc">Expo config plugins — native tweaks that survive <code>expo prebuild</code></span></summary>
+      <ul>
+        <li><div class="row"><span class="desc">portrait on iPhone/iPad · modular headers for Firebase · release signing · ProGuard rules · dSYM handling</span></div></li>
+      </ul></details></li>
+    <li><details><summary class="row"><span class="name">modules/</span><span class="tag skip">skip</span><span class="desc">local native modules (here: jumper-sdk for BLE devices)</span></summary></details></li>
+    <li><details><summary class="row"><span class="name">docs/ · scripts/ · .husky/ · .github/</span><span class="tag copy">copy</span><span class="desc">PR rules, navigation tree, git hooks, CI workflows</span></summary></details></li>
+
+    <li><details open><summary class="row"><span class="name">src/</span><span class="desc">all app code</span></summary>
+    <ul>
+
+      <li><details><summary class="row"><span class="name">navigation/</span><span class="tag adapt">adapt</span><span class="desc">trim to your screens</span></summary>
+        <ul>
+          <li><div class="row"><span class="name">RootNavigator</span><span class="desc">swaps one stack: Auth → profile chooser → App; keyed on active profile id so a switch remounts everything</span></div></li>
+          <li><div class="row"><span class="name">AuthNavigator</span><span class="desc">login, OTP, consent, reset password</span></div></li>
+          <li><div class="row"><span class="name">AppNavigator</span><span class="desc">native stack: bottom tabs first, then every pushed screen</span></div></li>
+          <li><div class="row"><span class="name">CustomTabBar</span><span class="desc">draws the tab bar and the "More" sheet</span></div></li>
+          <li><div class="row"><span class="name">types.ts</span><span class="desc">typed param lists — add every new screen here</span></div></li>
+        </ul></details></li>
+
+      <li><details open><summary class="row"><span class="name">shared/</span><span class="tag copy">copy</span><span class="desc">used by 2+ features; trim what you don't need</span></summary>
+        <ul>
+          <li><details><summary class="row"><span class="name">api/</span><span class="desc">client.ts, retryPolicy, retryQueue, errorMessages, paramsSerializer, mockMode</span></summary>
+            <ul><li><div class="row"><span class="desc">One axios instance: auth header, retry/offline queue, 401 refresh, ApiError mapping. See API layer.</span></div></li></ul></details></li>
+          <li><details><summary class="row"><span class="name">components/</span><span class="desc">ButtonComponent, TextInput, Toast, ErrorPopup, ConnectivityBanner, Loader, ScreenHeader, Icons, sheets…</span></summary>
+            <ul><li><div class="row"><span class="desc">One folder per component: <code>components/&lt;Name&gt;/&lt;Name&gt;.tsx</code></span></div></li></ul></details></li>
+          <li><details><summary class="row"><span class="name">config/</span><span class="desc">env.ts (feature flags), environments.ts, envStore.ts (live base URL)</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">constants/</span><span class="desc">colors.ts, FontConstants.ts, layout.ts, routes.ts</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">context/</span><span class="desc">FontScaleContext</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">hooks/</span><span class="desc">useConnectivity, usePagedLoad, useScrollPaging, useKeyboardHeight…</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">i18n/</span><span class="desc">index.ts + locales/en.json + locales/hi.json</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">services/</span><span class="desc">notificationService, crashlyticsService</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">store/</span><span class="desc">configureStore, hooks.ts, selectors.ts + toast / error / connectivity slices</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">types/</span><span class="desc">ApiError and other cross-feature types</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">utils/</span><span class="desc">formatters, resetApp, clearLocalData…</span></summary></details></li>
+        </ul></details></li>
+
+      <li><details open><summary class="row"><span class="name">features/</span><span class="desc">one folder per product area</span></summary>
+        <ul>
+          <li><details><summary class="row"><span class="name">splash/</span><span class="tag adapt">adapt</span><span class="desc">animated launch screen; waits for animation <b>and</b> auth rehydration</span></summary></details></li>
+          <li><details><summary class="row"><span class="name">auth/</span><span class="tag adapt">adapt</span><span class="desc">login, OTP, consent, profile chooser, StorageService</span></summary></details></li>
+          <li><details open><summary class="row"><span class="name">&lt;feature&gt;/</span><span class="desc">your product areas — same shape every time</span></summary>
+            <ul>
+              <li><div class="row"><span class="name">screens/</span><span class="desc">*Screen.tsx — compose components, call hooks, no API calls</span></div></li>
+              <li><div class="row"><span class="name">components/</span><span class="desc">UI used only by this feature</span></div></li>
+              <li><div class="row"><span class="name">hooks/</span><span class="desc">useX.ts — React Query hooks or screen logic</span></div></li>
+              <li><div class="row"><span class="name">services/</span><span class="desc">xService.ts — the <b>only</b> place that calls apiClient</span></div></li>
+              <li><div class="row"><span class="name">store/</span><span class="tag opt">optional</span><span class="desc">slice, only when state must be global</span></div></li>
+              <li><div class="row"><span class="name">types/ or types.ts</span><span class="desc">request/response types copied from the API schema</span></div></li>
+              <li><div class="row"><span class="name">utils/</span><span class="desc">pure helpers: mappers, formatters</span></div></li>
+              <li><div class="row"><span class="name">mock/</span><span class="desc">fixtures used when EXPO_PUBLIC_USE_MOCK=true</span></div></li>
+              <li><div class="row"><span class="name">__tests__/</span><span class="desc">next to the code it tests (also nested: components/__tests__…)</span></div></li>
+            </ul></details></li>
+        </ul></details></li>
+
+      <li><details><summary class="row"><span class="name">__mocks__/</span><span class="tag copy">copy</span><span class="desc">Jest stubs for heavy components (ButtonStub, CheckBoxStub), wired via moduleNameMapper</span></summary></details></li>
+    </ul></details></li>
+  </ul>
+  </div>
+
+  <h3>Features in this repo (domain-specific — do not copy)</h3>
+  <div class="pills" style="margin-top:0">
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">appointments</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">chartLive</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">clinical</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">devices</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">doctors</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">help</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">home</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">messages</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">payments</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">records</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">symptoms</span>
+    <span class="pill" style="background:var(--bad-soft);color:var(--bad)">trends</span>
+    <span class="pill" style="background:var(--warn-soft);color:var(--warn)">profile (keep the shell)</span>
+    <span class="pill" style="background:var(--warn-soft);color:var(--warn)">notifications (keep the shell)</span>
+    <span class="pill" style="background:var(--ok-soft);color:var(--ok)">auth (keep)</span>
+    <span class="pill" style="background:var(--ok-soft);color:var(--ok)">splash (keep)</span>
+  </div>
+</section>
+
+<!-- FEATURE -->
+<section id="feature">
+  <h2><span class="n">3</span>Feature anatomy &amp; the dependency rule</h2>
+  <p class="sub">Every feature has the same shape; create only the folders you need.</p>
+  <div class="grid">
+    <div class="card"><b>Flow</b><span>screen → hook → service → <code>apiClient</code>. Screens never import axios.</span></div>
+    <div class="card"><b>Dependency direction</b><span><code>shared/</code> never imports from <code>features/</code>. Features may import <code>shared/</code> freely, and another feature's hook/type only when truly needed.</span></div>
+    <div class="card"><b>Redux vs React Query</b><span>Server data (lists, details, paging) → React Query. Only session, toasts, error popup, connectivity and live counters → Redux.</span></div>
+    <div class="card"><b>Types from the schema</b><span>Copy from the Swagger schema, never guess. Each service/type file notes what it was checked against.</span></div>
+    <div class="card"><b>Strings</b><span>No hardcoded UI text. Add the key to both <code>en.json</code> and <code>hi.json</code>.</span></div>
+    <div class="card"><b>Safe areas</b><span>Full-screen stack screens: <code>SafeAreaView edges={['top','bottom']}</code>. Tab screens leave the bottom to the tab bar.</span></div>
+  </div>
+  <div class="callout warn">Android is edge-to-edge: a missing bottom edge hides the last button behind the system nav bar.</div>
+</section>
+
+<!-- SHELL -->
+<section id="shell">
+  <h2><span class="n">4</span>App shell — <code>App.tsx</code> &amp; navigation</h2>
+  <p class="sub">Provider order, outermost first.</p>
+  <div class="nest"><span class="lab">SafeAreaProvider</span>
+    <div class="nest"><span class="lab">FontScaleProvider</span>
+      <div class="nest"><span class="lab">Redux Provider</span>
+        <div class="nest"><span class="lab">QueryClientProvider</span>
+          <div class="nest"><span class="lab">AppRoot <small>— loads env, rehydrates auth, shows splash, renders RootNavigator</small></span></div>
+          <div class="nest"><span class="lab">Toast · ErrorPopup · ConnectivityBanner · StatusBar <small>— siblings of AppRoot</small></span></div>
+        </div></div></div></div>
+
+  <h3>Navigation switch</h3>
+  <div class="flow">
+    <span class="step">Not signed in → Auth stack</span><span class="sep">→</span>
+    <span class="step">Signed in, no profile → Profile chooser</span><span class="sep">→</span>
+    <span class="step alt">Profile active → App stack (tabs + pushed screens)</span>
+  </div>
+  <ul>
+    <li>Fonts load with <code>expo-font</code> first (Inter Regular / Medium / SemiBold / Bold).</li>
+    <li>Splash stays up until the animation <b>and</b> auth rehydration (token + profile from SecureStore) are both done.</li>
+    <li>Add each new screen to the stack <b>and</b> to <code>navigation/types.ts</code>.</li>
+    <li>Deep links: the <code>linking</code> config in <code>App.tsx</code> (custom scheme + https domain); its <code>screens</code> must mirror the navigator nesting.</li>
+    <li>Keep a <code>docs/project-arch/navigation-tree.md</code> mapping each screen to its folder and entry points.</li>
+  </ul>
+</section>
+
+<!-- API -->
+<section id="api">
+  <h2><span class="n">5</span>API layer — <code>shared/api/client.ts</code></h2>
+  <p class="sub">One axios instance, <code>baseURL = &lt;active env&gt;/api/</code>, 10 s timeout. Behaviour to reproduce:</p>
+  <div class="tablewrap"><table>
+    <tr><th style="width:190px">Step</th><th>Behaviour</th></tr>
+    <tr><td><b>Request</b></td><td>Attach <code>Authorization: Bearer &lt;token&gt;</code> from SecureStore. Dev builds log method + URL (auth bodies redacted).</td></tr>
+    <tr><td><b>Network failure / timeout</b></td><td>Retry safe requests with backoff (<code>retryPolicy</code>); offline → queue idempotent requests for replay (<code>retryQueue</code>); online timeout → toast. Callers that own offline handling pass <code>skipOfflineHandling</code>.</td></tr>
+    <tr><td><b>401</b></td><td>Refresh the token once, replay the request, queue other requests meanwhile. Failed refresh → toast + clear storage + <code>logout</code>. A 401 after the retry also logs out.</td></tr>
+    <tr><td><b>403 account restricted</b></td><td>Toast the server's message, clear storage, log out.</td></tr>
+    <tr><td><b>Other errors</b></td><td>Reject with a translated <code>ApiError(message, code, status, errors)</code>. Branch on <code>code</code>, never on message text. The global error popup is intentionally disabled.</td></tr>
+    <tr><td><b>Env switch</b></td><td><code>envStore</code> holds the live base URL; the instance re-points itself without being rebuilt.</td></tr>
+  </table></div>
+  <h3>Environments</h3>
+  <p><code>environments.ts</code> lists dev / qa / uat / production, each URL from <code>EXPO_PUBLIC_API_BASE_URL_*</code>. A picker (<code>EnvironmentPicker</code>, opened by a hidden tap on the login logo) switches at runtime and saves the choice.</p>
+  <h3>Mock mode</h3>
+  <div class="callout info"><code>EXPO_PUBLIC_USE_MOCK=true</code>: services return fixtures from <code>mock/</code>, auth uses placeholder tokens, and <code>mockMode.ts</code> makes the client refuse any real network call so nothing logs you out. Chat and notification sockets stay off in this mode.</div>
+</section>
+
+<!-- CONFIG -->
+<section id="config">
+  <h2><span class="n">6</span>Config, env &amp; flags</h2>
+  <ul>
+    <li>All build-time values are <code>EXPO_PUBLIC_*</code> in <code>.env</code> (gitignored); <code>.env.example</code> documents each.</li>
+    <li>After changing <code>.env</code>, restart Metro: <code>npx expo start -c</code>.</li>
+    <li>Feature flags are plain booleans exported from <code>shared/config/env.ts</code> (<code>USE_MOCK</code>, <code>ENABLE_MESSAGES</code>, <code>ENABLE_TRENDS</code>, …). A flagged-off feature keeps its tab/entry visible and shows a "coming soon" state instead of vanishing.</li>
+  </ul>
+  <div class="two">
+    <div><b style="color:var(--ok)">✔ Works</b><pre>process.env.EXPO_PUBLIC_API_BASE_URL_DEV</pre></div>
+    <div><b style="color:var(--bad)">✘ Undefined at runtime</b><pre>process.env[`EXPO_PUBLIC_${name}`]</pre></div>
+  </div>
+  <p class="sub">Expo replaces <code>process.env.EXPO_PUBLIC_X</code> by text substitution at build time, so write each variable out in full.</p>
+</section>
+
+<!-- AUTH -->
+<section id="auth">
+  <h2><span class="n">7</span>Auth &amp; storage</h2>
+  <div class="flow">
+    <span class="step">Phone / email</span><span class="sep">→</span><span class="step">OTP</span><span class="sep">→</span><span class="step">Consent screen(s)</span><span class="sep">→</span><span class="step alt">Role / profile chooser</span>
+  </div>
+  <ul>
+    <li><code>StorageService</code> (SecureStore) holds token, refresh token, profile, FCM token and active profile ids; <code>clearAll()</code> is the single sign-out wipe. Never put secrets in AsyncStorage.</li>
+    <li><code>authSlice</code> holds <code>isAuthenticated</code>, user, active profile, <code>isSwitchingProfile</code>; <code>logout</code> is dispatched from the API client.</li>
+    <li>Password reset arrives by deep link.</li>
+    <li>Push permission is requested at startup; the device token is registered with the backend at login.</li>
+  </ul>
+</section>
+
+<!-- UI -->
+<section id="ui">
+  <h2><span class="n">8</span>UI conventions</h2>
+  <div class="grid">
+    <div class="card"><b>Colours &amp; fonts</b><span>Only from <code>shared/constants/colors.ts</code> (<code>Colors.primary7Main</code>, <code>grey*</code>, <code>stroke*</code>) and <code>FontFamily</code>.</span></div>
+    <div class="card"><b>Reusable pieces</b><span><code>shared/components/&lt;Name&gt;/&lt;Name&gt;.tsx</code> — button, text input, loader, toast, header, bottom sheets.</span></div>
+    <div class="card"><b>Lists &amp; states</b><span>Page with <code>usePagedLoad</code> / <code>useScrollPaging</code>; error / empty / loading reuse <code>ScreenState</code>.</span></div>
+    <div class="card"><b>Feedback</b><span>Toasts for outcomes (<code>showToast</code>), inline errors for form fields.</span></div>
+    <div class="card"><b>Accessibility</b><span>Labels on icon buttons; <code>testID</code> on anything a test presses.</span></div>
+  </div>
+</section>
+
+<!-- TESTS -->
+<section id="tests">
+  <h2><span class="n">9</span>Testing</h2>
+  <ul>
+    <li>Tests sit in a <code>__tests__</code> folder next to what they test, named <code>&lt;File&gt;.test.ts(x)</code>.</li>
+    <li><code>jest.setup.js</code> globally stubs native modules that break at import (AsyncStorage, expo-crypto, react-native-blob-util, react-native-razorpay). Add a stub whenever a native module throws under Jest.</li>
+    <li><code>src/__mocks__/</code> holds stubs for heavy components (<code>ButtonStub</code>, <code>CheckBoxStub</code>) wired via <code>moduleNameMapper</code>; Firebase modules are mapped the same way.</li>
+    <li>Typical suite: mock the service, render the screen, assert on keys (i18n is mocked to return the key).</li>
+  </ul>
+  <div class="callout ok">Rule: every changed or new source file gets a test in the same PR.</div>
+</section>
+
+<!-- GATES -->
+<section id="gates">
+  <h2><span class="n">10</span>Quality gates &amp; workflow</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Gate</th><th>Where</th></tr>
+    <tr><td><code>npx tsc --noEmit</code> + <code>npm run test:ci</code></td><td><code>.husky/pre-commit</code> — blocks the commit</td></tr>
+    <tr><td>No direct push to <code>main</code> / <code>preview</code></td><td><code>.husky/pre-push</code> + <code>branch-protection.yml</code></td></tr>
+    <tr><td>Type check, tests, JS bundle for Android + iOS</td><td><code>.github/workflows/ci.yml</code> (manual <code>workflow_dispatch</code> here)</td></tr>
+    <tr><td>PR review rules (banned patterns, ticket key in branch + title, tests present, API checked against Swagger)</td><td><code>docs/PR-REVIEW-COMPLIANCE-RULES.md</code>, <code>.github/scripts/</code></td></tr>
+  </table></div>
+  <p>Branches carry a Jira key (<code>feature/ADH-123-short-name</code>). Prettier: single quotes, semicolons, trailing commas, 100 columns.</p>
+</section>
+
+<!-- NATIVE -->
+<section id="native">
+  <h2><span class="n">11</span>Native &amp; build config</h2>
+  <ul>
+    <li><code>app.json</code>: portrait only; iPad supported with full-screen requirement; bundle id / package name; Firebase plist + json; associated domains; custom scheme for deep links.</li>
+    <li>Config plugins in <code>plugins/</code> patch the generated native projects. They run on every <code>expo prebuild</code>, so native fixes belong there, not in <code>ios/</code> or <code>android/</code>.</li>
+    <li><code>eas.json</code>: development, preview, qa, uat, production (+ submit). Local Android builds via <code>npm run build:android:qa|uat</code>.</li>
+    <li>Metro: SVG transformer + NativeWind wrapper in <code>metro.config.js</code>.</li>
+  </ul>
+</section>
+
+<!-- BOOTSTRAP -->
+<section id="boot">
+  <h2><span class="n">12</span>Bootstrap checklist for a new project</h2>
+  <p class="sub">Tick as you go — progress is saved in this browser.</p>
+  <div class="progress"><i id="bar"></i></div>
+  <div id="count" class="sub" style="margin:0 0 6px"></div>
+  <ol class="check" id="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1"><code>npx create-expo-app@latest &lt;name&gt; --template blank-typescript</code>; pin the same Expo SDK; <code>npx expo install expo-dev-client</code>.</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2">Install the libraries from the Stack table (use <code>npx expo install</code> for Expo packages); add Firebase only if you need push/crash.</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3">Copy config files unchanged: babel, metro, tailwind, tsconfig, <code>jest.config.js</code>, <code>jest.setup.js</code>, <code>.prettierrc.js</code>, <code>.eslintrc.js</code>, <code>.npmrc</code>, <code>svg.d.ts</code>, <code>nativewind-env.d.ts</code>, <code>global.css</code>.</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4">Copy <code>src/shared/</code> whole, then delete what you don't need (payments helpers, clinical utils). Fix the two shared→feature imports.</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5">Copy <code>src/features/auth</code> and <code>splash</code>; replace patient-specific copy, API paths and types; keep <code>StorageService</code>.</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6">Copy <code>src/navigation/</code> and trim <code>AppNavigator</code> to your screens; update <code>types.ts</code>.</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7">Copy <code>App.tsx</code>; change <code>DOMAIN</code>, the deep-link <code>scheme</code> and the screen paths.</label></li>
+    <li><input type="checkbox" id="c8"><label for="c8">Create <code>.env.example</code> with <code>EXPO_PUBLIC_API_BASE_URL_*</code>, <code>EXPO_PUBLIC_DEFAULT_ENV</code>, <code>EXPO_PUBLIC_USE_MOCK</code> and your flags; copy <code>environments.ts</code> and edit the fallback hosts.</label></li>
+    <li><input type="checkbox" id="c9"><label for="c9">Copy <code>plugins/</code> (only what you need), <code>eas.json</code>, <code>.husky/</code>, <code>.github/</code>, <code>docs/PR-REVIEW-COMPLIANCE-RULES.md</code>; update app name, bundle id, package name, Firebase files.</label></li>
+    <li><input type="checkbox" id="c10"><label for="c10">Add your first feature using the anatomy above; write its service, hook, screen, mock and tests together.</label></li>
+    <li><input type="checkbox" id="c11"><label for="c11">Run <code>npx tsc --noEmit</code>, <code>npm run test:ci</code>, then <code>npx expo prebuild</code> and a dev-client build on both platforms.</label></li>
+  </ol>
+</section>
+
+<!-- PITFALLS -->
+<section id="pitfalls">
+  <h2><span class="n">13</span>Pitfalls this codebase already hit</h2>
+  <div class="callout bad"><b>EXPO_PUBLIC_* computed lookups</b> silently return <code>undefined</code> — write each variable in full.</div>
+  <div class="callout bad"><b>Android edge-to-edge</b> hides bottom-aligned buttons unless the screen's <code>SafeAreaView</code> includes the bottom edge.</div>
+  <div class="callout warn"><b>Native modules that create an event emitter at import time</b> crash Jest — stub them in <code>jest.setup.js</code>.</div>
+  <div class="callout warn"><b>Mock login with real sockets/API calls</b> logs the user out via the 401 handler — gate sockets and unmocked calls on <code>USE_MOCK</code>.</div>
+  <div class="callout warn"><b>Push tap that cold-starts the app</b> needs both the expo and the Firebase initial-notification checks; verify on a real device.</div>
+  <div class="callout info"><b>Missing i18n keys</b> render as the raw key (e.g. <code>symptoms.picker.other</code>) — add to both locale files and check after any rename.</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function safe(fn){try{return fn()}catch(e){return null}}
+
+  // theme toggle
+  var saved=safe(function(){return localStorage.getItem('abs-theme')});
+  if(saved) root.setAttribute('data-theme',saved);
+  document.getElementById('theme').addEventListener('click',function(){
+    var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
+    var next=dark?'light':'dark';
+    root.setAttribute('data-theme',next);
+    safe(function(){localStorage.setItem('abs-theme',next)});
+  });
+
+  // tree expand / collapse
+  var all=function(){return document.querySelectorAll('#treeRoot details')};
+  document.getElementById('expand').onclick=function(){all().forEach(function(d){d.open=true})};
+  document.getElementById('collapse').onclick=function(){all().forEach(function(d){d.open=false})};
+
+  // checklist with saved progress
+  var boxes=Array.prototype.slice.call(document.querySelectorAll('#checklist input'));
+  var state=safe(function(){return JSON.parse(localStorage.getItem('abs-check')||'{}')})||{};
+  function render(){
+    var n=0;
+    boxes.forEach(function(b){
+      b.parentNode.classList.toggle('done',b.checked);
+      if(b.checked)n++;
+    });
+    document.getElementById('bar').style.width=(n/boxes.length*100)+'%';
+    document.getElementById('count').textContent=n+' of '+boxes.length+' done';
+  }
+  boxes.forEach(function(b){
+    if(state[b.id])b.checked=true;
+    b.addEventListener('change',function(){
+      state[b.id]=b.checked;
+      safe(function(){localStorage.setItem('abs-check',JSON.stringify(state))});
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>
