@@ -1,18 +1,90 @@
-import { Button, StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-type Props = { onSignIn: () => void };
+import AuthScreen from '../components/AuthScreen/AuthScreen';
+import Button from '@/shared/components/Button/Button';
+import Divider from '@/shared/components/Divider/Divider';
+import FormError from '@/shared/components/FormError/FormError';
+import { IconFaceId, IconMail } from '@/shared/components/Icons/Icons';
+import PasswordInput from '../components/PasswordInput/PasswordInput';
+import TextButton from '@/shared/components/TextButton/TextButton';
+import TextInput, { type AppTextInputRef } from '@/shared/components/TextInput/TextInput';
+import type { AuthScreenProps } from '@/navigation/types';
 
-export default function LoginScreen({ onSignIn }: Props) {
+import { useSignIn } from '../hooks/useSignIn';
+
+type Props = AuthScreenProps<'Login'> & { onSignIn: () => void };
+
+export default function LoginScreen({ route, onSignIn }: Props) {
+  const passwordRef = useRef<AppTextInputRef>(null);
+  // Straight after creating a password the email is filled in and Face ID is left out:
+  // Face ID can only be turned on in settings, once signed in.
+  const created = route.params?.created === true;
+  const form = useSignIn(route.params?.email ?? '', onSignIn);
+
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <Text style={styles.title}>Login</Text>
-      <Button title="Sign in" onPress={onSignIn} />
-    </SafeAreaView>
+    <AuthScreen title={created ? 'Sign in' : 'Welcome back'}>
+      <View style={styles.stack}>
+        <FormError message={form.formError} />
+        <TextInput
+          label="Email"
+          icon={IconMail}
+          required
+          value={form.email}
+          onChangeText={form.setEmail}
+          error={form.fieldErrors.email}
+          placeholder="Enter email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="email"
+          textContentType="emailAddress"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          testID="sign-in-email"
+        />
+        <PasswordInput
+          ref={passwordRef}
+          label="Password"
+          required
+          value={form.password}
+          onChangeText={form.setPassword}
+          error={form.fieldErrors.password}
+          placeholder="Enter password"
+          autoComplete="current-password"
+          textContentType="password"
+          returnKeyType="go"
+          onSubmitEditing={form.submit}
+          testID="sign-in-password"
+        />
+        {/* Password reset has no flow behind it yet. */}
+        <View style={styles.forgot}>
+          <TextButton title="Forgot password?" onPress={() => {}} />
+        </View>
+        <Button
+          title="Sign in"
+          onPress={form.submit}
+          loading={form.loading}
+          testID="sign-in-submit"
+        />
+        {!created ? (
+          <>
+            <Divider />
+            {/* Face ID sign-in has no flow behind it yet. */}
+            <Button
+              title="Sign in with Face ID"
+              variant="outline"
+              icon={IconFaceId}
+              onPress={() => {}}
+            />
+          </>
+        ) : null}
+      </View>
+    </AuthScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
-  title: { fontSize: 24, fontWeight: '600' },
+  stack: { gap: 20 },
+  forgot: { alignSelf: 'flex-end', marginTop: -4 },
 });

@@ -1,7 +1,9 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type AuthStackParamList = {
-  Login: undefined;
+  Activate: undefined;
+  SetPassword: { email: string };
+  Login: { created?: boolean; email?: string } | undefined;
 };
 
 export type AppStackParamList = {

@@ -4,6 +4,7 @@
   "main": "index.ts",
   "dependencies": {
     "@expo/ui": "~58.0.29",
+    "@hugeicons/core-free-icons": "^4.4.0",
     "@react-navigation/bottom-tabs": "^7.22.0",
     "@react-navigation/native": "^7.5.2",
     "@react-navigation/native-stack": "^7.21.1",
@@ -26,6 +27,7 @@
     "react-native-reanimated": "4.7.1",
     "react-native-safe-area-context": "~5.11.1",
     "react-native-screens": "~4.30.1",
+    "react-native-svg": "15.16.0",
     "react-native-web": "~0.21.4",
     "react-native-worklets": "0.13.0"
   },
@@ -36,12 +38,16 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "start": "./scripts/with-node.sh expo start",
+    "android": "./scripts/with-node.sh expo run:android",
+    "ios": "./scripts/with-node.sh expo run:ios",
+    "android:device": "./scripts/with-node.sh expo run:android --device",
+    "ios:device": "./scripts/with-node.sh expo run:ios --device",
+    "prebuild:android": "./scripts/with-node.sh expo prebuild --platform android",
+    "prebuild:ios": "./scripts/with-node.sh expo prebuild --platform ios",
+    "web": "./scripts/with-node.sh expo start --web",
+    "lint": "./scripts/with-node.sh expo lint",
+    "reset-project": "node ./scripts/reset-project.js"
   },
   "private": true
 }

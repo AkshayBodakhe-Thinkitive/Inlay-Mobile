@@ -2,7 +2,7 @@
 
 # Inlay
 
-Expo (SDK 58) + React Native 0.88 + TypeScript app using React Navigation 7. Created with `create-expo-app`, then reset and restructured to `docs/project-arch/app-base-structure-template.md`. See [SETUP.md](SETUP.md) for how the project was created.
+Expo (SDK 58) + React Native 0.88 + TypeScript app using React Navigation 7. Created with `create-expo-app`, then reset and restructured to `docs/project-arch/app-base-structure-template.md`. See [SETUP.md](SETUP.md) for how the project was created. Extra background and reference files live in [docs/REFERENCE.md](docs/REFERENCE.md) — read it only when a task needs it.
 
 ## Stack
 
@@ -19,7 +19,7 @@ Expo (SDK 58) + React Native 0.88 + TypeScript app using React Navigation 7. Cre
 | `src/navigation/` | Root/Auth/App navigators and `types.ts` |
 | `src/shared/` | Code used by 2+ features (api, components, config, constants, hooks, i18n, store…) |
 | `src/features/<name>/` | One folder per product area (screens, components, hooks, services, types, mock) |
-| `assets/` | Empty for now; fonts, icons, images go here |
+| `assets/` | `fonts/` (Inter), `images/` (logo mark, splash mark) |
 | `app.json` | Expo config (name, scheme `inlay`, plugins, experiments) |
 
 ## Conventions

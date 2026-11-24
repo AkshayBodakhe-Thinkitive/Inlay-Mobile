@@ -1,0 +1,20 @@
+// Tokens from the prototype's theme (Inlay-Project/src/lib/theme.ts).
+export const Colors = {
+  primary: '#01837E',
+  primaryPressed: '#016D69',
+  primaryHalo: '#94E6E0',
+  primaryTint: '#F2F7F7',
+  primaryTintPressed: '#E6F3F2',
+  primaryEdge: '#C2E1E0',
+  onPrimary: '#FFFFFF',
+  text: '#0A0A0A',
+  muted: '#67656B',
+  placeholder: '#67656B',
+  border: '#E5E5E5',
+  inputBorder: '#D0E3E1',
+  background: '#FFFFFF',
+  error: '#B70000',
+  errorHalo: '#F8D3CE',
+  errorTint: '#FCE9E6',
+  inkPrimary: '#015D59',
+} as const;
