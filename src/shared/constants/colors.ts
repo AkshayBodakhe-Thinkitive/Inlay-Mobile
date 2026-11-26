@@ -13,8 +13,25 @@ export const Colors = {
   border: '#E5E5E5',
   inputBorder: '#D0E3E1',
   background: '#FFFFFF',
+  /** Connected / synced status dot. */
+  success: '#1FA34A',
   error: '#B70000',
   errorHalo: '#F8D3CE',
   errorTint: '#FCE9E6',
   inkPrimary: '#015D59',
+  /** Page background behind cards on setup screens. */
+  surface: '#F5F6F8',
+  card: '#FAFBFC',
+  cardBorder: '#EBEDF0',
+  /** Hues for icon tiles and note boxes (from the prototype's theme). */
+  blue: '#3056D3',
+  blueTint: '#E8EEFF',
+  amber: '#C8641B',
+  amberTint: '#FEF4E5',
+  ok: '#2F7F4D',
+  okTint: '#E9FAEF',
+  high: '#C72B32',
+  highTint: '#FDECEE',
+  content: '#393939',
+  scrim: 'rgba(10, 10, 10, 0.4)',
 } as const;

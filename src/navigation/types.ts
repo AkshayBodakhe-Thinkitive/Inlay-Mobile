@@ -6,6 +6,14 @@ export type AuthStackParamList = {
   Login: { created?: boolean; email?: string } | undefined;
 };
 
+export type OnboardingStackParamList = {
+  AboutYou: undefined;
+  Consent: undefined;
+  ConnectRecords: undefined;
+  UpdatesAboutCare: undefined;
+  YourWhy: undefined;
+};
+
 export type AppStackParamList = {
   Home: undefined;
 };
@@ -17,5 +25,10 @@ export type AuthScreenProps<T extends keyof AuthStackParamList> = NativeStackScr
 
 export type AppScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
   AppStackParamList,
+  T
+>;
+
+export type OnboardingScreenProps<T extends keyof OnboardingStackParamList> = NativeStackScreenProps<
+  OnboardingStackParamList,
   T
 >;

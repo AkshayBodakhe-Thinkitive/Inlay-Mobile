@@ -1,20 +1,20 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useCallback, useEffect, useState } from "react";
+import { View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import LaunchScreen from '@/features/splash/screens/LaunchScreen';
-import RootNavigator from '@/navigation/RootNavigator';
+import LaunchScreen from "@/features/splash/screens/LaunchScreen";
+import RootNavigator from "@/navigation/RootNavigator";
 
 SplashScreen.preventAutoHideAsync();
 
 const FONTS = {
-  Inter_400Regular: require('./assets/fonts/Inter_400Regular.ttf'),
-  Inter_500Medium: require('./assets/fonts/Inter_500Medium.ttf'),
-  Inter_600SemiBold: require('./assets/fonts/Inter_600SemiBold.ttf'),
+  Inter_400Regular: require("./assets/fonts/Inter_400Regular.ttf"),
+  Inter_500Medium: require("./assets/fonts/Inter_500Medium.ttf"),
+  Inter_600SemiBold: require("./assets/fonts/Inter_600SemiBold.ttf"),
 };
 
 export default function App() {
@@ -42,7 +42,7 @@ export default function App() {
         {!launched ? <LaunchScreen ready={ready} onDone={endLaunch} /> : null}
       </View>
       {/* Dark icons on the white launch screen, light on the teal sign-in header. */}
-      <StatusBar style={launched ? 'light' : 'dark'} />
+      <StatusBar style={launched ? "dark" : "light"} />
     </SafeAreaProvider>
   );
 }

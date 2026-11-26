@@ -1,6 +1,6 @@
 export const Space = {
-  gutter: 24,
-  section: 20,
+  gutter: 20,
+  section: 15,
   item: 12,
   inline: 8,
   stack: 4,
