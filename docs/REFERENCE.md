@@ -24,9 +24,9 @@ Background info and pointers that don't belong in [CLAUDE.md](../CLAUDE.md). Rea
 
 - Bottom tabs and `CustomTabBar`
 - Deep-link `linking` config
-- Redux store, React Query, axios client, i18n
+- Redux store, React Query, i18n, API error/retry/401 handling (`shared/api/client.ts` is a bare axios instance)
 - Real auth flow (`RootNavigator` uses a local flag)
-- `.env.example`, EAS profiles
+- Runtime environment picker (hidden tap on the logo) and the Redux/React Query layers
 
 ## Environment notes
 

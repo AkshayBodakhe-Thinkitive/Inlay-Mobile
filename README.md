@@ -25,6 +25,28 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Environment & flags
+
+Configuration comes from `EXPO_PUBLIC_*` variables, read in one place: [src/shared/config/env.ts](src/shared/config/env.ts).
+
+1. Create your local file: `cp .env.example .env` (`.env` is git-ignored).
+2. Edit values, then fully reload the app. If a value looks stale, restart Metro with `npx expo start -c`.
+3. EAS cloud builds don't receive `.env`. Each profile in [eas.json](eas.json) has its own `env` block with the same keys.
+
+> Every `EXPO_PUBLIC_` value is built into the app and readable by anyone. Never put secrets, API keys or tokens in them.
+
+| Key | Default (`.env.example`) | What it does | Profiles where it's on |
+|---|---|---|---|
+| `EXPO_PUBLIC_DEFAULT_ENV` | `dev` | Environment a fresh install starts on: `dev`, `qa`, `uat` or `production`. Unknown values mean `dev`. | development=`dev`, qa=`qa`, uat=`uat`, production=`production` |
+| `EXPO_PUBLIC_API_BASE_URL_DEV` / `_QA` / `_UAT` / `_PROD` | placeholder URLs | API base URL per environment. Trailing slash is stripped. Placeholders: replace with real hosts. | all |
+| `EXPO_PUBLIC_USE_MOCK` | `true` | Services return sample data and never call the network. | development |
+| `EXPO_PUBLIC_ENABLE_FORGOT_PASSWORD` | `false` | Shows "Forgot password?" on Sign in. | development |
+| `EXPO_PUBLIC_ENABLE_FACE_ID_SIGN_IN` | `false` | Shows "Sign in with Face ID" on Sign in. | development |
+
+Only the exact value `true` turns a flag on; a missing or misspelled value is off.
+
+**Mock mode.** Only service functions (`features/<feature>/services`) check `USE_MOCK`. Mock data lives in `features/<feature>/mock/`. Mock sign-in: see `features/auth/mock/authMocks.ts`.
+
 ## Get a fresh project
 
 When you're ready, run:
@@ -55,9 +77,9 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
-## npx expo prebuild --platform android
+## npm run prebuild:android -- --clean
 
-## npx expo prebuild --platform ios
+## npm run prebuild:ios -- --clean
 
 ## npm run ios:device
 

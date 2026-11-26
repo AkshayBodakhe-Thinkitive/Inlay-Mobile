@@ -1,0 +1,56 @@
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_DEFAULT_ENV": "dev",
+        "EXPO_PUBLIC_API_BASE_URL_DEV": "https://dev-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_QA": "https://qa-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_UAT": "https://uat-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_PROD": "https://api.inlay.example.com",
+        "EXPO_PUBLIC_USE_MOCK": "true",
+        "EXPO_PUBLIC_ENABLE_FORGOT_PASSWORD": "true",
+        "EXPO_PUBLIC_ENABLE_FACE_ID_SIGN_IN": "true"
+      }
+    },
+    "qa": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_DEFAULT_ENV": "qa",
+        "EXPO_PUBLIC_API_BASE_URL_DEV": "https://dev-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_QA": "https://qa-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_UAT": "https://uat-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_PROD": "https://api.inlay.example.com",
+        "EXPO_PUBLIC_USE_MOCK": "false",
+        "EXPO_PUBLIC_ENABLE_FORGOT_PASSWORD": "false",
+        "EXPO_PUBLIC_ENABLE_FACE_ID_SIGN_IN": "false"
+      }
+    },
+    "uat": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_DEFAULT_ENV": "uat",
+        "EXPO_PUBLIC_API_BASE_URL_DEV": "https://dev-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_QA": "https://qa-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_UAT": "https://uat-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_PROD": "https://api.inlay.example.com",
+        "EXPO_PUBLIC_USE_MOCK": "false",
+        "EXPO_PUBLIC_ENABLE_FORGOT_PASSWORD": "false",
+        "EXPO_PUBLIC_ENABLE_FACE_ID_SIGN_IN": "false"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_DEFAULT_ENV": "production",
+        "EXPO_PUBLIC_API_BASE_URL_DEV": "https://dev-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_QA": "https://qa-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_UAT": "https://uat-api.inlay.example.com",
+        "EXPO_PUBLIC_API_BASE_URL_PROD": "https://api.inlay.example.com",
+        "EXPO_PUBLIC_USE_MOCK": "false",
+        "EXPO_PUBLIC_ENABLE_FORGOT_PASSWORD": "false",
+        "EXPO_PUBLIC_ENABLE_FACE_ID_SIGN_IN": "false"
+      }
+    }
+  }
+}

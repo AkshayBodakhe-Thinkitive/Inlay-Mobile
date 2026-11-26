@@ -8,11 +8,20 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.akshay-expo3107.Inlay",
-      "appleTeamId": "64G8U6DVL7"
+      "appleTeamId": "64G8U6DVL7",
+      "icon": {
+        "light": "./assets/images/icon-light.png",
+        "dark": "./assets/images/icon.png"
+      }
     },
     "android": {
       "predictiveBackGestureEnabled": false,
-      "package": "com.akshayexpo3107.Inlay"
+      "package": "com.akshayexpo3107.Inlay",
+      "adaptiveIcon": {
+        "backgroundColor": "#173E45",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
     },
     "web": {
       "output": "single"
@@ -29,6 +38,7 @@
     ],
     "experiments": {
       "reactCompiler": true
-    }
+    },
+    "icon": "./assets/images/icon.png"
   }
 }

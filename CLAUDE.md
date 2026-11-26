@@ -25,6 +25,7 @@ Expo (SDK 58) + React Native 0.88 + TypeScript app using React Navigation 7. Cre
 ## Conventions
 
 - Add packages with `npx expo install <pkg>`, never plain `npm install`, so versions match the SDK.
+- Read `process.env` only in `src/shared/config/env.ts`; only services check `USE_MOCK`; feature flags (`ENABLE_*`) are checked at entry points only. See README.
 - `shared/` never imports from `features/`; screens call hooks → services, never axios directly.
 - Platform-specific files use suffixes: `.web.tsx`, `.ios.tsx`, `.android.tsx`.
 - Take colors and fonts from `src/shared/constants`, not hard-coded values.

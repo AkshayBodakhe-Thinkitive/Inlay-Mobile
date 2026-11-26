@@ -9,6 +9,7 @@ import { IconFaceId, IconMail } from '@/shared/components/Icons/Icons';
 import PasswordInput from '../components/PasswordInput/PasswordInput';
 import TextButton from '@/shared/components/TextButton/TextButton';
 import TextInput, { type AppTextInputRef } from '@/shared/components/TextInput/TextInput';
+import { ENABLE_FACE_ID_SIGN_IN, ENABLE_FORGOT_PASSWORD } from '@/shared/config/env';
 import type { AuthScreenProps } from '@/navigation/types';
 
 import { useSignIn } from '../hooks/useSignIn';
@@ -57,17 +58,18 @@ export default function LoginScreen({ route, onSignIn }: Props) {
           onSubmitEditing={form.submit}
           testID="sign-in-password"
         />
-        {/* Password reset has no flow behind it yet. */}
-        <View style={styles.forgot}>
-          <TextButton title="Forgot password?" onPress={() => {}} />
-        </View>
+        {ENABLE_FORGOT_PASSWORD ? (
+          <View style={styles.forgot}>
+            <TextButton title="Forgot password?" onPress={() => {}} />
+          </View>
+        ) : null}
         <Button
           title="Sign in"
           onPress={form.submit}
           loading={form.loading}
           testID="sign-in-submit"
         />
-        {!created ? (
+        {!created && ENABLE_FACE_ID_SIGN_IN ? (
           <>
             <Divider />
             {/* Face ID sign-in has no flow behind it yet. */}
